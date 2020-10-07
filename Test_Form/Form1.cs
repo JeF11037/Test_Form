@@ -21,14 +21,19 @@ namespace Test_Form
         RadioButton rbtn1 = new RadioButton();
         RadioButton rbtn2 = new RadioButton();
         TextBox txtbx = new TextBox();
+        PictureBox pcrbx = new PictureBox();
+        TabControl tbcntr = new TabControl();
+        TabPage tp1 = new TabPage("First");
+        TabPage tp2 = new TabPage("Second");
+        TabPage tp3 = new TabPage("Third");
 
         Random rnd = new Random();
 
-        static readonly string readable_file = @"Test_Form\readablefile.txt";
+        static readonly string readable_file = @"C:\Users\opilane\source\repos\JeF11037\Test_Form\readablefile.txt";
 
         public Form1()
         {
-            this.Height = 400;
+            this.Height = 800;
             this.Width = 600;
             this.Text = "Test Form";
             tree_view.Dock = DockStyle.Right;
@@ -90,14 +95,73 @@ namespace Test_Form
                     this.Controls.Add(rbtn2);
                     break;
                 case "TextBox":
-                    txtbx.Text = "A im a TEXTBOX";
-                    txtbx.Width = 150;
-                    txtbx.Height = 100;
+                    txtbx.Size = new Size(100, 50);
                     txtbx.Location = new Point(220, 250);
                     txtbx.TextChanged += Txtbx_TextChanged;
                     this.Controls.Add(txtbx);
                     break;
+                case "PictureBox":
+                    pcrbx.Size = new Size(200, 80);
+                    pcrbx.SizeMode = PictureBoxSizeMode.Zoom;
+                    pcrbx.Location = new Point(200, 300);
+                    pcrbx.Image = (Image)new Bitmap(@"C:\Users\opilane\source\repos\JeF11037\Test_Form\Test_Form\Image1.png");
+                    this.Controls.Add(pcrbx);
+                    break;
+                case "TabControl":
+                    tbcntr.TabPages.Clear();
+                    tbcntr.Location = new Point(200, 400);
+                    tbcntr.Size = new Size(200, 100);
+                    tp1.BackColor = Color.FromArgb(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
+                    tp2.BackColor = Color.FromArgb(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
+                    tp3.BackColor = Color.FromArgb(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
+                    tbcntr.Controls.Add(tp1);
+                    tbcntr.Controls.Add(tp2);
+                    tbcntr.Controls.Add(tp3);
+                    this.Controls.Add(tbcntr);
+                    AskAboutTabs();
+                    break;
+                case "MessageBox":
+                    MessageBox.Show("Hi, im a MESSAGEBOX", "MessageBox");
+                    if (MessageBox.Show("Wanna see InputBox ?", "MessageBox", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    {
+                        if (MessageBox.Show(Microsoft.VisualBasic.Interaction.InputBox("Put in something", "InputBox"), "Is this that you had written ?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            MessageBox.Show("Sounds good", "MessageBox");
+                        }
+                        else
+                        {
+                            MessageBox.Show("Oops", "MessageBox");
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("OK", "MessageBox", MessageBoxButtons.OK);
+                    }
+                    break;
             }
+        }
+
+        private void AskAboutTabs()
+        {
+            if (MessageBox.Show("Wanna see specific tab ?", "MessageBox", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+
+                using (Form2 form = new Form2(tbcntr))
+                {
+                    form.ShowDialog();
+                    tbcntr.SelectedIndex = form.tab_index;
+                }
+
+            }
+            else
+            {
+                MessageBox.Show("OK", "MessageBox");
+            }
+        }
+
+        public void SetTab(int index)
+        {
+            tbcntr.SelectedIndex = index;
         }
 
         private void Txtbx_TextChanged(object sender, EventArgs e)
@@ -168,6 +232,9 @@ namespace Test_Form
             tree_view.Nodes[0].Nodes.Add("CheckBox");
             tree_view.Nodes[0].Nodes.Add("RadioButton");
             tree_view.Nodes[0].Nodes.Add("TextBox");
+            tree_view.Nodes[0].Nodes.Add("PictureBox");
+            tree_view.Nodes[0].Nodes.Add("TabControl");
+            tree_view.Nodes[0].Nodes.Add("MessageBox");
             tree_view.EndUpdate();
         }
     }
