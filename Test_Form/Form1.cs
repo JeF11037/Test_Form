@@ -26,6 +26,11 @@ namespace Test_Form
         TabPage tp1 = new TabPage("First");
         TabPage tp2 = new TabPage("Second");
         TabPage tp3 = new TabPage("Third");
+        ListBox lb = new ListBox();
+        DataSet ds = new DataSet();
+        DataGridView dgv = new DataGridView();
+        MainMenu mm = new MainMenu();
+        MenuItem mi = new MenuItem("File");
 
         Random rnd = new Random();
 
@@ -111,9 +116,9 @@ namespace Test_Form
                     tbcntr.TabPages.Clear();
                     tbcntr.Location = new Point(200, 400);
                     tbcntr.Size = new Size(200, 100);
-                    tp1.BackColor = Color.FromArgb(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
-                    tp2.BackColor = Color.FromArgb(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
-                    tp3.BackColor = Color.FromArgb(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
+                    tp1.BackColor = Color.FromArgb(255, rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
+                    tp2.BackColor = Color.FromArgb(255, rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
+                    tp3.BackColor = Color.FromArgb(255, rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
                     tbcntr.Controls.Add(tp1);
                     tbcntr.Controls.Add(tp2);
                     tbcntr.Controls.Add(tp3);
@@ -138,6 +143,57 @@ namespace Test_Form
                         MessageBox.Show("OK", "MessageBox", MessageBoxButtons.OK);
                     }
                     break;
+                case "ListBox":
+                    lb.Location = new Point(200, 500);
+                    lb.SelectedIndexChanged += Lb_SelectedIndexChanged;
+                    string count_of_colors = "15";
+                    Color[] colors_massive = new Color[Int32.Parse(count_of_colors)];
+
+                    int tick = 0;
+                    foreach (KnownColor el in Enum.GetValues(typeof(KnownColor)))
+                    {
+                        colors_massive[tick] = Color.FromKnownColor(el);
+                        lb.Items.Add(Color.FromKnownColor(el).Name.ToString());
+                        tick++;
+                        if (tick >= Int32.Parse(count_of_colors))
+                        {
+                            break;
+                        }
+                    }
+                    this.Controls.Add(lb);
+                    break;
+                case "DataGridView":
+                    ds.ReadXml("../../XMLFile1.xml");
+                    dgv.Location = new Point(200, 600);
+                    dgv.AutoGenerateColumns = true;
+                    dgv.DataSource = ds.Tables[0];
+                    this.Controls.Add(dgv);
+                    break;
+                case "MainMenu":
+                    mi.MenuItems.Add("Exit", new EventHandler(MenuExit));
+                    mm.MenuItems.Add(mi);
+                    this.Menu = mm;
+                    break;
+            }
+        }
+
+        private void Lb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private int RandomDouble(int value)
+        {
+            double temp = (double)value;
+            int result = (int)Math.Round(temp / 10) * 10;
+            return result;
+        }
+
+        private void MenuExit(object sunder, EventArgs e)
+        {
+            if (MessageBox.Show("Do you want to close the menu", "MessageBox", MessageBoxButtons.OK) == DialogResult.OK)
+            {
+                this.Dispose();
             }
         }
 
@@ -220,7 +276,7 @@ namespace Test_Form
 
         private void ChangeColor(object sender, EventArgs e)
         {
-            this.BackColor = Color.FromArgb(rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
+            this.BackColor = Color.FromArgb(255, rnd.Next(0, 256), rnd.Next(0, 256), rnd.Next(0, 256));
         }
 
         private void InitializeTreeView()
@@ -235,6 +291,9 @@ namespace Test_Form
             tree_view.Nodes[0].Nodes.Add("PictureBox");
             tree_view.Nodes[0].Nodes.Add("TabControl");
             tree_view.Nodes[0].Nodes.Add("MessageBox");
+            tree_view.Nodes[0].Nodes.Add("ListBox");
+            tree_view.Nodes[0].Nodes.Add("DataGridView");
+            tree_view.Nodes[0].Nodes.Add("MainMenu");
             tree_view.EndUpdate();
         }
     }
