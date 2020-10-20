@@ -33,6 +33,7 @@ namespace Test_Form
         MenuItem mi = new MenuItem("File");
 
         Random rnd = new Random();
+        Color[] colors_massive;
 
         static readonly string readable_file = @"C:\Users\opilane\source\repos\JeF11037\Test_Form\readablefile.txt";
 
@@ -48,7 +49,7 @@ namespace Test_Form
             FileReader();
         }
 
-        private void TreeViewAfterSelect(object s, TreeViewEventArgs e) 
+        private void TreeViewAfterSelect(object s, TreeViewEventArgs e)
         {
 
             switch ((e.Node.Text))
@@ -146,8 +147,17 @@ namespace Test_Form
                 case "ListBox":
                     lb.Location = new Point(200, 500);
                     lb.SelectedIndexChanged += Lb_SelectedIndexChanged;
-                    string count_of_colors = "15";
-                    Color[] colors_massive = new Color[Int32.Parse(count_of_colors)];
+                    string count_of_colors;
+                    try
+                    {
+                        count_of_colors = Microsoft.VisualBasic.Interaction.InputBox("Put digit", "InputBox");
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("Incorrect", "MessageBox");
+                        break;
+                    }
+                    colors_massive = new Color[Int32.Parse(count_of_colors)];
 
                     int tick = 0;
                     foreach (KnownColor el in Enum.GetValues(typeof(KnownColor)))
@@ -171,15 +181,23 @@ namespace Test_Form
                     break;
                 case "MainMenu":
                     mi.MenuItems.Add("Exit", new EventHandler(MenuExit));
+                    mi.MenuItems.Add("BG color", new EventHandler(ChangeColor));
+                    mi.MenuItems.Add("Do something", new EventHandler(Okey));
                     mm.MenuItems.Add(mi);
                     this.Menu = mm;
                     break;
             }
         }
 
+        private void Okey(object sender, EventArgs e)
+        {
+            MessageBox.Show("Oops", "MessageBox");
+        }
+
         private void Lb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+            ListBox temp_lb = (ListBox)sender;
+            this.BackColor = colors_massive[temp_lb.SelectedIndex];
         }
 
         private int RandomDouble(int value)
