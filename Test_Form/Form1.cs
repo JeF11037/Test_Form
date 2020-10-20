@@ -151,26 +151,26 @@ namespace Test_Form
                     try
                     {
                         count_of_colors = Microsoft.VisualBasic.Interaction.InputBox("Put digit", "InputBox");
+                        colors_massive = new Color[Int32.Parse(count_of_colors)];
+
+                        int tick = 0;
+                        foreach (KnownColor el in Enum.GetValues(typeof(KnownColor)))
+                        {
+                            colors_massive[tick] = Color.FromKnownColor(el);
+                            lb.Items.Add(Color.FromKnownColor(el).Name.ToString());
+                            tick++;
+                            if (tick >= Int32.Parse(count_of_colors))
+                            {
+                                break;
+                            }
+                        }
+                        this.Controls.Add(lb);
                     }
                     catch (Exception)
                     {
                         MessageBox.Show("Incorrect", "MessageBox");
                         break;
                     }
-                    colors_massive = new Color[Int32.Parse(count_of_colors)];
-
-                    int tick = 0;
-                    foreach (KnownColor el in Enum.GetValues(typeof(KnownColor)))
-                    {
-                        colors_massive[tick] = Color.FromKnownColor(el);
-                        lb.Items.Add(Color.FromKnownColor(el).Name.ToString());
-                        tick++;
-                        if (tick >= Int32.Parse(count_of_colors))
-                        {
-                            break;
-                        }
-                    }
-                    this.Controls.Add(lb);
                     break;
                 case "DataGridView":
                     ds.ReadXml("../../XMLFile1.xml");
